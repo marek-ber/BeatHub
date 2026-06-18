@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card shadow-sm p-4 mb-4">
+
+    {% if profile_user.profile.avatar %}
+        <img
+            src="{{ profile_user.profile.avatar.url }}"
+            class="rounded-circle mb-3 object-fit-cover"
+            style="width: 150px; height: 150px;"
+            alt="{{ profile_user.username }}"
+        >
+    {% endif %}
+
+    <h1>{{ profile_user.username }}</h1>
+
+    {% if profile_user.profile.bio %}
+        <p>{{ profile_user.profile.bio }}</p>
+    {% endif %}
+
+</div>
+
+<h2 class="mb-4">Playlisty</h2>
+
+    {% if request.user == profile_user %}
+        <a
+            href="{% url 'playlist_create' %}"
+            class="btn btn-dark mb-4"
+        >
+            Utwórz nową playlistę
+        </a>
+    {% endif %}
+
+<div class="row">
+
+    {% for playlist in playlists %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5>
+                        {{ playlist.name }}
+                    </h5>
+
+                    <p>
+                        {{ playlist.description }}
+                    </p>
+
+                    <a
+                        href="{% url 'playlist_detail' playlist.id %}"
+                        class="btn btn-dark"
+                    >
+                        Otwórz
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <p>Brak playlist.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

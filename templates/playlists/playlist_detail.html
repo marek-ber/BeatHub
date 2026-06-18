@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-5">
+
+    <h1>{{ playlist.name }}</h1>
+
+    <p class="text-muted">
+        {{ playlist.description }}
+    </p>
+
+    <p>
+        Playlista utworzona przez:
+        <strong>
+            {{ playlist.owner.username }}
+        </strong>
+
+        {% if request.user == playlist.owner %}
+        <a href="{% url 'playlist_update' playlist.id %}" class="btn btn-warning">
+            Edytuj
+        </a>
+
+        <a href="{% url 'playlist_delete' playlist.id %}" class="btn btn-danger">
+            Usuń
+        </a>
+        {% endif %}
+    </p>
+
+</div>
+
+<h2 class="mb-4">Piosenki</h2>
+
+<ul class="list-group">
+
+    {% for playlist_song in playlist_songs %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+    <span>
+        {{ playlist_song.order }}.
+        {{ playlist_song.song.title }}
+    </span>
+
+    <div>
+    <span class="me-3">
+        {{ playlist_song.song.duration_formatted }}
+    </span>
+
+    {% if request.user == playlist.owner %}
+        <a href="{% url 'move_song_up' playlist_song.id %}" class="btn btn-sm btn-secondary">
+            ↑
+        </a>
+
+        <a href="{% url 'move_song_down' playlist_song.id %}" class="btn btn-sm btn-secondary">
+            ↓
+        </a>
+
+        <a href="{% url 'remove_song_from_playlist' playlist_song.id %}" class="btn btn-sm btn-danger">
+            Usuń
+        </a>
+    {% endif %}
+    </div>
+
+</li>
+
+    {% empty %}
+
+        <li class="list-group-item">
+            Playlista jest pusta.
+        </li>
+
+    {% endfor %}
+
+    {% if request.user == playlist.owner %}
+    <a
+        href="{% url 'add_song_to_playlist' playlist.id %}"
+        class="btn btn-dark mb-4"
+    >
+        Dodaj piosenkę
+    </a>
+{% endif %}
+</ul>
+
+{% endblock %}

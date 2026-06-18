@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-5">
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            {% if artist.image %}
+                <img
+                    src="{{ artist.image.url }}"
+                    class="img-fluid rounded shadow-sm object-fit-cover"
+                    style="max-height: 500px; width: 100%;"
+                >
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-8">
+
+            <h1>{{ artist.pseudonym }}</h1>
+
+            <h5 class="mt-4">Gatunki</h5>
+
+            {% for genre in artist.genres.all %}
+
+                <span class="badge bg-dark">
+                    {{ genre.name }}
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<h2 class="mb-4">Albumy</h2>
+
+<div class="row">
+
+    {% for album in albums %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm">
+
+                {% if album.cover %}
+                    <img
+                        src="{{ album.cover.url }}"
+                        class="card-img-top"
+                    >
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h5>{{ album.title }}</h5>
+
+                    <p>
+                        {{ album.release_date }}
+                    </p>
+
+                    <a
+                        href="{% url 'album_detail' album.id %}"
+                        class="btn btn-dark"
+                    >
+                        Wyświetl album
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">Wykonawcy</h1>
+
+<div class="row">
+
+    {% for artist in artists %}
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+
+                {% if artist.image %}
+                    <img
+                        src="{{ artist.image.url }}"
+                        class="card-img-top object-fit-cover"
+                        style="height: 300px;"
+                    >
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ artist.pseudonym }}
+                    </h5>
+
+                    <a
+                        href="{% url 'artist_detail' artist.id %}"
+                        class="btn btn-dark"
+                    >
+                        Wyświetl wykonawcę
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    {% empty %}
+
+        <p>Brak wykonawców</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

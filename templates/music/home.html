@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-5 mb-5 bg-dark text-white rounded">
+
+    <h1 class="display-4">BeatHub</h1>
+
+    <p class="lead">
+        Odkrywaj wykonawców, albumy i utwory. Twórz własne playlisty.
+    </p>
+
+    <a href="{% url 'artist_list' %}" class="btn btn-light">
+    Przeglądaj wykonawców
+    </a>
+
+    {% if user.is_authenticated %}
+
+        <a href="{% url 'playlist_create' %}" class="btn btn-primary">
+            Utwórz playlistę
+        </a>
+
+        <a href="{% url 'profile' user.username %}" class="btn btn-success">
+            Moje playlisty
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'login' %}" class="btn btn-primary">
+            Zaloguj się
+        </a>
+
+    {% endif %}
+
+</div>
+
+<h2 class="mb-4">Polecani wykonawcy</h2>
+
+<div class="row mb-5">
+
+    {% for artist in artists %}
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+
+                {% if artist.image %}
+                    <img
+                        src="{{ artist.image.url }}"
+                        class="card-img-top object-fit-cover"
+                        style="height: 250px;"
+                    >
+                {% endif %}
+
+                <div class="card-body">
+                    <h5>{{ artist.pseudonym }}</h5>
+
+                    <a
+                        href="{% url 'artist_detail' artist.id %}"
+                        class="btn btn-dark"
+                    >
+                        Wyświetl wykonawcę
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    {% empty %}
+        <p>Brak wykonawców.</p>
+    {% endfor %}
+
+</div>
+
+<h2 class="mb-4">Najnowsze albumy</h2>
+
+<div class="row mb-5">
+
+    {% for album in albums %}
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+
+                {% if album.cover %}
+                    <img
+                        src="{{ album.cover.url }}"
+                        class="card-img-top object-fit-cover"
+                        style="height: 250px;"
+                    >
+                {% endif %}
+
+                <div class="card-body">
+                    <h5>{{ album.title }}</h5>
+
+                    <p class="text-muted">
+                        {{ album.artist.pseudonym }}
+                    </p>
+
+                    <a
+                        href="{% url 'album_detail' album.id %}"
+                        class="btn btn-dark"
+                    >
+                        Wyświetl album
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    {% empty %}
+        <p>Brak albumów.</p>
+    {% endfor %}
+
+</div>
+
+<h2 class="mb-4">Piosenki</h2>
+
+<ul class="list-group mb-5">
+
+    {% for song in songs %}
+
+        <li class="list-group-item d-flex justify-content-between">
+            <span>
+                {{ song.title }} —
+                {{ song.album.artist.pseudonym }}
+            </span>
+
+            <span>
+                {{ song.duration_formatted }}
+            </span>
+        </li>
+
+    {% empty %}
+        <li class="list-group-item">
+            Brak piosenek.
+        </li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
